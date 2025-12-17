@@ -35,20 +35,20 @@
             <el-icon><Edit /></el-icon>编辑板块
           </el-button>
           <el-tooltip
-            v-if="isModerator"
-            :content="section.status === 1 ? '点击禁用板块' : '点击启用板块'"
-            placement="top"
+              v-if="isModerator"
+              :content="section.status === 1 ? '点击禁用板块' : '点击启用板块'"
+              placement="top"
           >
             <el-switch
-              v-model="section.status"
-              :active-value="1"
-              :inactive-value="0"
-              :loading="statusLoading"
-              @change="handleStatusChange"
-              style="margin-left: 10px;"
-              inline-prompt
-              :active-text="'启用'"
-              :inactive-text="'禁用'"
+                v-model="section.status"
+                :active-value="1"
+                :inactive-value="0"
+                :loading="statusLoading"
+                @change="handleStatusChange"
+                style="margin-left: 10px;"
+                inline-prompt
+                :active-text="'启用'"
+                :inactive-text="'禁用'"
             />
           </el-tooltip>
         </div>
@@ -61,10 +61,10 @@
         </h4>
         <div class="moderator-items">
           <div
-            v-for="moderator in moderators"
-            :key="moderator.id"
-            class="moderator-item"
-            @click="showModeratorDetail(moderator)"
+              v-for="moderator in moderators"
+              :key="moderator.id"
+              class="moderator-item"
+              @click="showModeratorDetail(moderator)"
           >
             <el-avatar :size="40" :src="'/api' + moderator.user?.avatar">
               {{ moderator.user?.username?.charAt(0) }}
@@ -84,15 +84,15 @@
         <div class="filter-options">
           <div class="filter-tabs">
             <div
-              v-for="tab in [
+                v-for="tab in [
                 { label: '全部', value: 'all' },
                 { label: '精华', value: 'essence' },
                 { label: '最新', value: 'newest' },
                 { label: '热门', value: 'hottest' }
               ]"
-              :key="tab.value"
-              :class="['filter-tab', { active: filterType === tab.value }]"
-              @click="filterType = tab.value; handleFilterChange()"
+                :key="tab.value"
+                :class="['filter-tab', { active: filterType === tab.value }]"
+                @click="filterType = tab.value; handleFilterChange()"
             >
               <div class="tab-icon" v-if="tab.value === 'all'"><el-icon><Menu /></el-icon></div>
               <div class="tab-icon" v-else-if="tab.value === 'essence'"><el-icon><Star /></el-icon></div>
@@ -104,11 +104,11 @@
 
           <div class="search-container">
             <el-input
-              v-model="searchKeyword"
-              placeholder="搜索帖子"
-              clearable
-              @keyup.enter="handleSearch"
-              class="search-input"
+                v-model="searchKeyword"
+                placeholder="搜索帖子"
+                clearable
+                @keyup.enter="handleSearch"
+                class="search-input"
             >
               <template #prefix>
                 <el-icon><Search /></el-icon>
@@ -118,7 +118,7 @@
           </div>
         </div>
       </el-card>
-      
+
       <el-card class="post-list-card" v-loading="postsLoading">
         <template v-if="posts.length > 0">
           <transition-group name="post-list" tag="div" class="posts-container">
@@ -137,7 +137,8 @@
                   <el-tag v-if="post.isEssence" type="success" effect="dark" size="small" class="essence-tag">精华</el-tag>
                   {{ post.title }}
                 </router-link>
-                <div class="post-summary">{{ truncateContent(post.content) }}</div>
+                <!-- 这里我稍微增加了截断字数到200，并添加了title提示完整内容 -->
+                <div class="post-summary" :title="post.content">{{ truncateContent(post.content) }}</div>
                 <div class="post-footer">
                   <div class="post-stats">
                     <span class="post-views">
@@ -150,10 +151,10 @@
                     </span>
                   </div>
                   <div class="post-actions">
-                    <span 
-                      v-if="post.userId === userStore.userId" 
-                      class="post-delete" 
-                      @click.stop="handleDeletePost(post)"
+                    <span
+                        v-if="post.userId === userStore.userId"
+                        class="post-delete"
+                        @click.stop="handleDeletePost(post)"
                     >
                       <el-icon><Delete /></el-icon>
                       <span v-if="post.isDeleting">删除中...</span>
@@ -181,18 +182,18 @@
             </el-empty>
           </div>
         </template>
-        
+
         <!-- 分页器 -->
         <div class="pagination-container" v-if="total > 0">
           <el-pagination
-            :current-page="currentPage"
-            :page-size="pageSize"
-            @update:current-page="handleCurrentChange"
-            @update:page-size="handleSizeChange"
-            :page-sizes="[10, 20, 50, 100]"
-            :background="true"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
+              :current-page="currentPage"
+              :page-size="pageSize"
+              @update:current-page="handleCurrentChange"
+              @update:page-size="handleSizeChange"
+              :page-sizes="[10, 20, 50, 100]"
+              :background="true"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total"
           />
         </div>
       </el-card>
@@ -200,13 +201,13 @@
 
     <!-- 举报对话框 -->
     <el-dialog
-      v-model="reportDialogVisible"
-      title="举报帖子"
-      width="500px"
-      :show-close="true"
-      :close-on-click-modal="false"
-      destroy-on-close
-      center
+        v-model="reportDialogVisible"
+        title="举报帖子"
+        width="500px"
+        :show-close="true"
+        :close-on-click-modal="false"
+        destroy-on-close
+        center
     >
       <template #header>
         <div class="dialog-header">
@@ -227,12 +228,12 @@
         </el-form-item>
         <el-form-item label="举报原因" prop="reason">
           <el-input
-            v-model="reportForm.reason"
-            type="textarea"
-            :rows="4"
-            placeholder="请详细描述举报原因..."
-            maxlength="500"
-            show-word-limit
+              v-model="reportForm.reason"
+              type="textarea"
+              :rows="4"
+              placeholder="请详细描述举报原因..."
+              maxlength="500"
+              show-word-limit
           ></el-input>
         </el-form-item>
       </el-form>
@@ -248,11 +249,11 @@
 
     <!-- 编辑板块对话框 -->
     <el-dialog
-      v-model="editDialogVisible"
-      width="500px"
-      :close-on-click-modal="false"
-      destroy-on-close
-      center
+        v-model="editDialogVisible"
+        width="500px"
+        :close-on-click-modal="false"
+        destroy-on-close
+        center
     >
       <template #header>
         <div class="dialog-header">
@@ -261,22 +262,22 @@
         </div>
       </template>
       <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="editRules"
-        label-width="100px"
+          ref="editFormRef"
+          :model="editForm"
+          :rules="editRules"
+          label-width="100px"
       >
         <el-form-item label="板块名称" prop="sectionName">
           <el-input v-model="editForm.sectionName" placeholder="请输入板块名称" />
         </el-form-item>
         <el-form-item label="板块描述" prop="description">
           <el-input
-            v-model="editForm.description"
-            type="textarea"
-            :rows="4"
-            placeholder="请输入板块描述"
-            maxlength="500"
-            show-word-limit
+              v-model="editForm.description"
+              type="textarea"
+              :rows="4"
+              placeholder="请输入板块描述"
+              maxlength="500"
+              show-word-limit
           />
         </el-form-item>
       </el-form>
@@ -292,10 +293,10 @@
 
     <!-- 版主详情对话框 -->
     <el-dialog
-      v-model="moderatorDetailVisible"
-      width="500px"
-      destroy-on-close
-      center
+        v-model="moderatorDetailVisible"
+        width="500px"
+        destroy-on-close
+        center
     >
       <template #header>
         <div class="dialog-header">
@@ -329,7 +330,7 @@
               <div class="info-value">{{ formatDate(currentModerator.appointTime) }}</div>
             </div>
           </div>
-          
+
           <div class="info-card">
             <div class="info-icon"><el-icon><User /></el-icon></div>
             <div class="info-content">
@@ -337,7 +338,7 @@
               <div class="info-value">{{ currentModerator.appointByName }}</div>
             </div>
           </div>
-          
+
           <div class="info-card" v-if="currentModerator.user?.email">
             <div class="info-icon"><el-icon><Message /></el-icon></div>
             <div class="info-content">
@@ -345,7 +346,7 @@
               <div class="info-value">{{ currentModerator.user.email }}</div>
             </div>
           </div>
-          
+
           <div class="info-card" v-if="currentModerator.user?.phone">
             <div class="info-icon"><el-icon><Phone /></el-icon></div>
             <div class="info-content">
@@ -354,21 +355,21 @@
             </div>
           </div>
         </div>
-        
+
         <div class="user-description" v-if="currentModerator.user?.signature">
           <div class="description-title">
             <el-icon><ChatDotRound /></el-icon> 个性签名
           </div>
           <div class="description-content">{{ currentModerator.user.signature }}</div>
         </div>
-        
+
         <div class="user-description" v-if="currentModerator.user?.profile">
           <div class="description-title">
             <el-icon><Document /></el-icon> 个人简介
           </div>
           <div class="description-content">{{ currentModerator.user.profile }}</div>
         </div>
-        
+
         <div class="user-description" v-if="currentModerator.remark">
           <div class="description-title">
             <el-icon><InfoFilled /></el-icon> 备注说明
@@ -384,7 +385,7 @@
 import { ref, onMounted, computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { 
+import {
   Plus, View, ChatDotRound, Search, Warning,
   ArrowUp, ArrowDown, Share, Star, Delete, Edit,
   Document, Calendar, Timer, User, Menu, Reading,
@@ -476,10 +477,11 @@ const truncateContent = (content) => {
   const plainText = content.replace(/<[^>]+>/g, '')
   // 移除特殊字符和多余空格
   const cleanText = plainText
-    .replace(/&[^;]+;/g, '') // 移除HTML实体
-    .replace(/\s+/g, ' ') // 将多个空格合并为一个
-    .trim()
-  return cleanText.length > 150 ? cleanText.substring(0, 150) + '...' : cleanText
+      .replace(/&[^;]+;/g, '') // 移除HTML实体
+      .replace(/\s+/g, ' ') // 将多个空格合并为一个
+      .trim()
+  // 这里我把截断长度增加到了 200，让你能看到更多字
+  return cleanText.length > 200 ? cleanText.substring(0, 200) + '...' : cleanText
 }
 
 // 获取版块详情
@@ -495,7 +497,7 @@ const fetchSectionDetail = async () => {
         sectionIcon.value = getSectionIcon(sectionId.value)
       }
     })
-    
+
     // 获取版主列表
     await request.get(`/moderator/section/${sectionId.value}`, null, {
       showDefaultMsg: false,
@@ -530,17 +532,17 @@ const fetchPosts = async () => {
       currentPage: currentPage.value,
       size: pageSize.value
     }
-    
+
     // 根据筛选类型添加参数
     if (filterType.value === 'essence') {
       params.isEssence = 1
     }
-    
+
     // 添加搜索关键词
     if (searchKeyword.value) {
       params.title = searchKeyword.value
     }
-    
+
     // 根据筛选类型设置排序
     let url = '/post/page'
     if (filterType.value === 'newest') {
@@ -549,7 +551,7 @@ const fetchPosts = async () => {
       // 按浏览量排序
       url = '/post/hot'
     }
-    
+
     await request.get(url, params, {
       showDefaultMsg: false,
       onSuccess: (data) => {
@@ -560,7 +562,7 @@ const fetchPosts = async () => {
           isEssence: post.isEssence === 1 || post.is_essence === 1
         }))
         total.value = data.total || 0
-        
+
       }
     })
   } catch (error) {
@@ -577,7 +579,7 @@ const handleCreatePost = () => {
     router.push('/login')
     return
   }
-  
+
   // 跳转到发帖页面而不是显示对话框
   router.push({
     path: '/forum/create-post',
@@ -619,24 +621,24 @@ const handleReportPost = (post) => {
     router.push('/login')
     return
   }
-  
+
   reportForm.value = {
     type: 1, // 帖子类型
     targetId: post.id,
     targetContent: post.title,
     reason: ''
   }
-  
+
   reportDialogVisible.value = true
 }
 
 // 提交举报
 const submitReport = async () => {
   if (!reportFormRef.value) return
-  
+
   await reportFormRef.value.validate(async (valid) => {
     if (!valid) return
-    
+
     reportSubmitting.value = true
     try {
       const reportData = {
@@ -644,7 +646,7 @@ const submitReport = async () => {
         targetId: reportForm.value.targetId,
         reason: reportForm.value.reason
       }
-      
+
       await request.post('/report/add', reportData, {
         successMsg: '举报提交成功，管理员会尽快处理',
         onSuccess: () => {
@@ -675,12 +677,13 @@ const getSectionColor = (id) => {
 // 获取版块图标
 const getSectionIcon = (id) => {
   const icons = {
-    1: 'Reading',      // 学术交流
-    2: 'Collection',   // 教学资源
-    3: 'Sunny',        // 课外活动
-    4: 'Monitor',      // 技术交流
-    5: 'School'        // 校园生活
+    1: 'Reading',       // 学术交流
+    2: 'Collection',    // 教学资源
+    3: 'Sunny',         // 课外活动
+    4: 'Monitor',       // 技术交流
+    5: 'School'         // 校园生活
   }
+  // 返回对应的组件名称
   return icons[id] || 'Grid'
 }
 
@@ -694,10 +697,10 @@ const handleEditSection = () => {
 // 提交编辑
 const submitEdit = async () => {
   if (!editFormRef.value) return
-  
+
   await editFormRef.value.validate(async (valid) => {
     if (!valid) return
-    
+
     submitting.value = true
     try {
       await request.put(`/section/${sectionId.value}`, editForm, {
@@ -769,18 +772,18 @@ const handleDeletePost = (post) => {
     ElMessage.warning('请先登录')
     return
   }
-  
+
   // 检查是否是作者
   if (post.userId !== userStore.userId) {
     ElMessage.warning('只能删除自己的帖子')
     return
   }
-  
+
   // 如果正在删除，不重复操作
   if (post.isDeleting) {
     return
   }
-  
+
   ElMessageBox.confirm('确定要删除这篇帖子吗？此操作不可恢复！', '警告', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -791,7 +794,7 @@ const handleDeletePost = (post) => {
     if (postIndex !== -1) {
       posts.value[postIndex].isDeleting = true
     }
-    
+
     deleteLoading.value = true
     try {
       await request.delete(`/post/${post.id}`,{
@@ -811,8 +814,8 @@ const handleDeletePost = (post) => {
               todayPosts.value--
             }
           }, 500) // 500ms后删除，这样有动画过渡效果
-          
-      
+
+
         },
         onError: (error) => {
           // 删除失败，恢复帖子状态
@@ -841,11 +844,11 @@ const handleDeletePost = (post) => {
 // 获取图标组件
 const getIconComponent = (id) => {
   const icons = {
-    1: 'Reading',      // 学术交流
-    2: 'Collection',   // 教学资源
-    3: 'Sunny',        // 课外活动
-    4: 'Monitor',      // 技术交流
-    5: 'School'        // 校园生活
+    1: 'Reading',       // 学术交流
+    2: 'Collection',    // 教学资源
+    3: 'Sunny',         // 课外活动
+    4: 'Monitor',       // 技术交流
+    5: 'School'         // 校园生活
   }
   // 返回对应的组件名称
   return icons[id] || 'Grid'
@@ -854,7 +857,7 @@ const getIconComponent = (id) => {
 // 获取更亮的颜色（用于渐变）
 const getLighterColor = (color) => {
   // 简单实现，实际可以用色彩处理库
-  if (color === '#409EFF') return '#6abeff' 
+  if (color === '#409EFF') return '#6abeff'
   if (color === '#67C23A') return '#95e373'
   if (color === '#E6A23C') return '#ffc773'
   if (color === '#F56C6C') return '#ff9e9e'
@@ -881,13 +884,13 @@ onMounted(() => {
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   position: relative;
-  
+
   .card-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 120px;
+    height: 100%; /* 这里我改成了 100%，解决文字背景不够长的问题 */
     z-index: 0;
   }
 }
@@ -898,10 +901,10 @@ onMounted(() => {
   padding: 30px;
   position: relative;
   z-index: 1;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: this;
+    gap: 20px; /* 修复了这里的 typo: gap: this -> gap: 20px */
   }
 }
 
@@ -922,7 +925,7 @@ onMounted(() => {
   border-radius: 16px;
   margin-right: 5px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  
+
   .el-icon {
     font-size: 30px;
   }
@@ -950,18 +953,18 @@ onMounted(() => {
 .section-meta {
   display: flex;
   gap: 20px;
-  
+
   .meta-item {
     display: flex;
     align-items: center;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.85);
     gap: 5px;
-    
+
     .el-icon {
       font-size: 16px;
     }
-    
+
     .meta-value {
       font-weight: 700;
     }
@@ -973,7 +976,7 @@ onMounted(() => {
   gap: 10px;
   align-items: center;
   margin-top: 20px;
-  
+
   @media (max-width: 768px) {
     margin-top: 20px;
     align-self: flex-end;
@@ -984,7 +987,7 @@ onMounted(() => {
   background-color: #f8f9fa;
   padding: 20px 30px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  
+
   .moderator-title {
     margin: 0 0 15px;
     font-size: 18px;
@@ -993,18 +996,18 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 8px;
-    
+
     .el-icon {
       color: #8e44ad;
     }
   }
-  
+
   .moderator-items {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
   }
-  
+
   .moderator-item {
     display: flex;
     align-items: center;
@@ -1015,18 +1018,18 @@ onMounted(() => {
     transition: all 0.3s;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    
+
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
-    
+
     .moderator-info {
       display: flex;
       flex-direction: column;
       gap: 5px;
     }
-    
+
     .moderator-name {
       font-size: 15px;
       font-weight: 600;
@@ -1050,7 +1053,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 15px;
@@ -1063,7 +1066,7 @@ onMounted(() => {
   background: #f5f7fa;
   padding: 5px;
   border-radius: 12px;
-  
+
   .filter-tab {
     padding: 8px 16px;
     border-radius: 8px;
@@ -1075,26 +1078,26 @@ onMounted(() => {
     font-weight: 500;
     color: #606266;
     transition: all 0.3s;
-    
+
     &:hover {
       background: rgba(142, 68, 173, 0.1);
       color: #8e44ad;
     }
-    
+
     &.active {
       background: #8e44ad;
       color: white;
-      
+
       .tab-icon {
         color: white;
       }
     }
-    
+
     .tab-icon {
       color: #8e44ad;
       display: flex;
       align-items: center;
-      
+
       .el-icon {
         font-size: 16px;
       }
@@ -1105,7 +1108,7 @@ onMounted(() => {
 .search-container {
   display: flex;
   gap: 10px;
-  
+
   .search-input {
     width: 250px;
     .el-input__wrapper {
@@ -1124,7 +1127,7 @@ onMounted(() => {
 .empty-container {
   padding: 40px 0;
   text-align: center;
-  
+
   p {
     color: #909399;
     margin-bottom: 20px;
@@ -1136,7 +1139,7 @@ onMounted(() => {
   padding: 25px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   transition: all 0.3s;
-  
+
   &:hover {
     background-color: #f9f9fe;
   }
@@ -1144,12 +1147,12 @@ onMounted(() => {
   &:last-child {
     border-bottom: none;
   }
-  
+
   &.deleting {
     opacity: 0.5;
     background-color: #fef0f0;
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 15px;
@@ -1161,7 +1164,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   @media (max-width: 768px) {
     flex-direction: row;
     gap: 15px;
@@ -1172,7 +1175,7 @@ onMounted(() => {
 .author-info {
   text-align: center;
   margin-top: 10px;
-  
+
   @media (max-width: 768px) {
     text-align: left;
     margin-top: 0;
@@ -1228,7 +1231,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+
   .post-stats, .post-actions {
     display: flex;
     align-items: center;
@@ -1295,13 +1298,13 @@ onMounted(() => {
       }
     }
   }
-  
+
   .user-info-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     margin-bottom: 25px;
-    
+
     .info-card {
       display: flex;
       align-items: center;
@@ -1309,7 +1312,7 @@ onMounted(() => {
       padding: 15px;
       background-color: #f5f7fa;
       border-radius: 10px;
-      
+
       .info-icon {
         width: 40px;
         height: 40px;
@@ -1321,16 +1324,16 @@ onMounted(() => {
         justify-content: center;
         font-size: 18px;
       }
-      
+
       .info-content {
         flex: 1;
-        
+
         .info-label {
           font-size: 12px;
           color: #909399;
           margin-bottom: 5px;
         }
-        
+
         .info-value {
           font-size: 14px;
           font-weight: 600;
@@ -1339,10 +1342,10 @@ onMounted(() => {
       }
     }
   }
-  
+
   .user-description {
     margin-bottom: 20px;
-    
+
     .description-title {
       display: flex;
       align-items: center;
@@ -1351,12 +1354,12 @@ onMounted(() => {
       font-weight: 600;
       color: #303133;
       margin-bottom: 10px;
-      
+
       .el-icon {
         color: #8e44ad;
       }
     }
-    
+
     .description-content {
       background-color: #f5f7fa;
       padding: 15px;
@@ -1385,7 +1388,7 @@ onMounted(() => {
   gap: 10px;
   font-size: 18px;
   font-weight: 600;
-  
+
   .dialog-icon {
     color: #8e44ad;
     font-size: 20px;
@@ -1408,4 +1411,4 @@ onMounted(() => {
   overflow-y: auto;
   word-break: break-all;
 }
-</style> 
+</style>

@@ -109,11 +109,11 @@
         <div class="contact-info">
           <div class="contact-item">
             <el-icon><Location /></el-icon>
-            <span>地址：中国北京市海淀区学院路100号</span>
+            <span>地址：辽宁省沈阳市沈北新区沈阳师范大学</span>
           </div>
           <div class="contact-item">
             <el-icon><Message /></el-icon>
-            <span>邮箱：contact@teacherstudent.edu.cn</span>
+            <span>邮箱：hoy3214444441@163.com</span>
           </div>
           <div class="contact-item">
             <el-icon><Phone /></el-icon>
